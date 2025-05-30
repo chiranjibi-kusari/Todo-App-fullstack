@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import cors from "cors"
 import todoRoute from '../backend/routes/todo.route.js'
 import userRouter from '../backend/routes/user.route.js'
+import cookieParser from 'cookie-parser';
 
 
 dotenv.config()
@@ -11,6 +12,7 @@ dotenv.config()
 const app=express();
 const port =process.env.PORT;
 app.use(express.json())
+app.use(cookieParser())
 
 app.use(cors({
   origin:process.env.FRONTEND_URL,

@@ -15,7 +15,7 @@ export const userRregister = async (req, res) => {
     const { username, email, password } = req.body;
 
     if (!username || !email || !password) {
-      return res.json({ message: "Missing details." });
+      return res.json({ errors: "All field are required." });
     }
     const validation = userSchema.safeParse({ email, username, password });
     if (!validation.success) {
@@ -24,7 +24,7 @@ export const userRregister = async (req, res) => {
     }
 
     const aluser = await User.findOne({ email });
-    if (aluser) return res.json({ message: "User already register." });
+    if (aluser) return res.status(400).json({ errors: "User already register." });
 
     const hashPassword = await bcrypt.hash(password, 10);
 
@@ -47,7 +47,7 @@ export const userLogin = async (req, res) => {
 
     const user = await User.findOne({ email }).select("+password");
     if (!user || !(await bcrypt.compare(password, user.password)))
-      return res.status(400).json({ messaage: "Invalid email or password" });
+      return res.status(400).json({ errors: "Invalid email or password" });
     const token=await generateToken(user._id,res)
 
 
